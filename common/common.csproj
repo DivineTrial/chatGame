@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\proto\protocol.csproj" />
+    <ProjectReference Include="..\proto\csharp\protocol.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
