@@ -57,6 +57,386 @@ namespace Abelkhan
         }
 
     }
+    public class gate_call_room_create_room_cb
+    {
+        private UInt64 cb_uuid;
+        private gate_call_room_rsp_cb module_rsp_cb;
+
+        public gate_call_room_create_room_cb(UInt64 _cb_uuid, gate_call_room_rsp_cb _module_rsp_cb)
+        {
+            cb_uuid = _cb_uuid;
+            module_rsp_cb = _module_rsp_cb;
+        }
+
+        public event Action<string> on_create_room_cb;
+        public event Action<Int32> on_create_room_err;
+        public event Action on_create_room_timeout;
+
+        public gate_call_room_create_room_cb callBack(Action<string> cb, Action<Int32> err)
+        {
+            on_create_room_cb += cb;
+            on_create_room_err += err;
+            return this;
+        }
+
+        public void timeout(UInt64 tick, Action timeout_cb)
+        {
+            TinyTimer.add_timer(tick, ()=>{
+                module_rsp_cb.create_room_timeout(cb_uuid);
+            });
+            on_create_room_timeout += timeout_cb;
+        }
+
+        public void call_cb(string room_id)
+        {
+            if (on_create_room_cb != null)
+            {
+                on_create_room_cb(room_id);
+            }
+        }
+
+        public void call_err(Int32 err_code)
+        {
+            if (on_create_room_err != null)
+            {
+                on_create_room_err(err_code);
+            }
+        }
+
+        public void call_timeout()
+        {
+            if (on_create_room_timeout != null)
+            {
+                on_create_room_timeout();
+            }
+        }
+
+    }
+
+    public class gate_call_room_join_room_cb
+    {
+        private UInt64 cb_uuid;
+        private gate_call_room_rsp_cb module_rsp_cb;
+
+        public gate_call_room_join_room_cb(UInt64 _cb_uuid, gate_call_room_rsp_cb _module_rsp_cb)
+        {
+            cb_uuid = _cb_uuid;
+            module_rsp_cb = _module_rsp_cb;
+        }
+
+        public event Action<string, string> on_join_room_cb;
+        public event Action<Int32> on_join_room_err;
+        public event Action on_join_room_timeout;
+
+        public gate_call_room_join_room_cb callBack(Action<string, string> cb, Action<Int32> err)
+        {
+            on_join_room_cb += cb;
+            on_join_room_err += err;
+            return this;
+        }
+
+        public void timeout(UInt64 tick, Action timeout_cb)
+        {
+            TinyTimer.add_timer(tick, ()=>{
+                module_rsp_cb.join_room_timeout(cb_uuid);
+            });
+            on_join_room_timeout += timeout_cb;
+        }
+
+        public void call_cb(string theme, string room_name)
+        {
+            if (on_join_room_cb != null)
+            {
+                on_join_room_cb(theme, room_name);
+            }
+        }
+
+        public void call_err(Int32 err_code)
+        {
+            if (on_join_room_err != null)
+            {
+                on_join_room_err(err_code);
+            }
+        }
+
+        public void call_timeout()
+        {
+            if (on_join_room_timeout != null)
+            {
+                on_join_room_timeout();
+            }
+        }
+
+    }
+
+    public class gate_call_room_match_room_cb
+    {
+        private UInt64 cb_uuid;
+        private gate_call_room_rsp_cb module_rsp_cb;
+
+        public gate_call_room_match_room_cb(UInt64 _cb_uuid, gate_call_room_rsp_cb _module_rsp_cb)
+        {
+            cb_uuid = _cb_uuid;
+            module_rsp_cb = _module_rsp_cb;
+        }
+
+        public event Action<string, string, string> on_match_room_cb;
+        public event Action<Int32> on_match_room_err;
+        public event Action on_match_room_timeout;
+
+        public gate_call_room_match_room_cb callBack(Action<string, string, string> cb, Action<Int32> err)
+        {
+            on_match_room_cb += cb;
+            on_match_room_err += err;
+            return this;
+        }
+
+        public void timeout(UInt64 tick, Action timeout_cb)
+        {
+            TinyTimer.add_timer(tick, ()=>{
+                module_rsp_cb.match_room_timeout(cb_uuid);
+            });
+            on_match_room_timeout += timeout_cb;
+        }
+
+        public void call_cb(string room_id, string theme, string room_name)
+        {
+            if (on_match_room_cb != null)
+            {
+                on_match_room_cb(room_id, theme, room_name);
+            }
+        }
+
+        public void call_err(Int32 err_code)
+        {
+            if (on_match_room_err != null)
+            {
+                on_match_room_err(err_code);
+            }
+        }
+
+        public void call_timeout()
+        {
+            if (on_match_room_timeout != null)
+            {
+                on_match_room_timeout();
+            }
+        }
+
+    }
+
+/*this cb code is codegen by Abelkhan for c#*/
+    public class gate_call_room_rsp_cb : Abelkhan.Imodule {
+        public Dictionary<UInt64, gate_call_room_create_room_cb> map_create_room;
+        public Dictionary<UInt64, gate_call_room_join_room_cb> map_join_room;
+        public Dictionary<UInt64, gate_call_room_match_room_cb> map_match_room;
+        public gate_call_room_rsp_cb(Abelkhan.modulemng modules) : base("gate_call_room_rsp_cb")
+        {
+            map_create_room = new Dictionary<UInt64, gate_call_room_create_room_cb>();
+            modules.reg_method("gate_call_room_rsp_cb_create_room_rsp", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, create_room_rsp));
+            modules.reg_method("gate_call_room_rsp_cb_create_room_err", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, create_room_err));
+            map_join_room = new Dictionary<UInt64, gate_call_room_join_room_cb>();
+            modules.reg_method("gate_call_room_rsp_cb_join_room_rsp", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, join_room_rsp));
+            modules.reg_method("gate_call_room_rsp_cb_join_room_err", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, join_room_err));
+            map_match_room = new Dictionary<UInt64, gate_call_room_match_room_cb>();
+            modules.reg_method("gate_call_room_rsp_cb_match_room_rsp", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, match_room_rsp));
+            modules.reg_method("gate_call_room_rsp_cb_match_room_err", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, match_room_err));
+        }
+
+        public void create_room_rsp(IList<MsgPack.MessagePackObject> inArray){
+            var uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _room_id = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            var rsp = try_get_and_del_create_room_cb(uuid);
+            if (rsp != null)
+            {
+                rsp.call_cb(_room_id);
+            }
+        }
+
+        public void create_room_err(IList<MsgPack.MessagePackObject> inArray){
+            var uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _err_code = ((MsgPack.MessagePackObject)inArray[1]).AsInt32();
+            var rsp = try_get_and_del_create_room_cb(uuid);
+            if (rsp != null)
+            {
+                rsp.call_err(_err_code);
+            }
+        }
+
+        public void create_room_timeout(UInt64 cb_uuid){
+            var rsp = try_get_and_del_create_room_cb(cb_uuid);
+            if (rsp != null){
+                rsp.call_timeout();
+            }
+        }
+
+        private gate_call_room_create_room_cb try_get_and_del_create_room_cb(UInt64 uuid){
+            lock(map_create_room)
+            {
+                if (map_create_room.TryGetValue(uuid, out gate_call_room_create_room_cb rsp))
+                {
+                    map_create_room.Remove(uuid);
+                }
+                return rsp;
+            }
+        }
+
+        public void join_room_rsp(IList<MsgPack.MessagePackObject> inArray){
+            var uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _theme = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            var _room_name = ((MsgPack.MessagePackObject)inArray[2]).AsString();
+            var rsp = try_get_and_del_join_room_cb(uuid);
+            if (rsp != null)
+            {
+                rsp.call_cb(_theme, _room_name);
+            }
+        }
+
+        public void join_room_err(IList<MsgPack.MessagePackObject> inArray){
+            var uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _err_code = ((MsgPack.MessagePackObject)inArray[1]).AsInt32();
+            var rsp = try_get_and_del_join_room_cb(uuid);
+            if (rsp != null)
+            {
+                rsp.call_err(_err_code);
+            }
+        }
+
+        public void join_room_timeout(UInt64 cb_uuid){
+            var rsp = try_get_and_del_join_room_cb(cb_uuid);
+            if (rsp != null){
+                rsp.call_timeout();
+            }
+        }
+
+        private gate_call_room_join_room_cb try_get_and_del_join_room_cb(UInt64 uuid){
+            lock(map_join_room)
+            {
+                if (map_join_room.TryGetValue(uuid, out gate_call_room_join_room_cb rsp))
+                {
+                    map_join_room.Remove(uuid);
+                }
+                return rsp;
+            }
+        }
+
+        public void match_room_rsp(IList<MsgPack.MessagePackObject> inArray){
+            var uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _room_id = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            var _theme = ((MsgPack.MessagePackObject)inArray[2]).AsString();
+            var _room_name = ((MsgPack.MessagePackObject)inArray[3]).AsString();
+            var rsp = try_get_and_del_match_room_cb(uuid);
+            if (rsp != null)
+            {
+                rsp.call_cb(_room_id, _theme, _room_name);
+            }
+        }
+
+        public void match_room_err(IList<MsgPack.MessagePackObject> inArray){
+            var uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _err_code = ((MsgPack.MessagePackObject)inArray[1]).AsInt32();
+            var rsp = try_get_and_del_match_room_cb(uuid);
+            if (rsp != null)
+            {
+                rsp.call_err(_err_code);
+            }
+        }
+
+        public void match_room_timeout(UInt64 cb_uuid){
+            var rsp = try_get_and_del_match_room_cb(cb_uuid);
+            if (rsp != null){
+                rsp.call_timeout();
+            }
+        }
+
+        private gate_call_room_match_room_cb try_get_and_del_match_room_cb(UInt64 uuid){
+            lock(map_match_room)
+            {
+                if (map_match_room.TryGetValue(uuid, out gate_call_room_match_room_cb rsp))
+                {
+                    map_match_room.Remove(uuid);
+                }
+                return rsp;
+            }
+        }
+
+    }
+
+    public class gate_call_room_caller : Abelkhan.Icaller {
+        public static gate_call_room_rsp_cb rsp_cb_gate_call_room_handle = null;
+        private Int32 uuid_24ac4ad1_da15_3ab8_b145_66592d61f431 = (Int32)RandomUUID.random();
+
+        public gate_call_room_caller(Abelkhan.Ichannel _ch, Abelkhan.modulemng modules) : base("gate_call_room", _ch)
+        {
+            if (rsp_cb_gate_call_room_handle == null)
+            {
+                rsp_cb_gate_call_room_handle = new gate_call_room_rsp_cb(modules);
+            }
+        }
+
+        public gate_call_room_create_room_cb create_room(string user_id, string chat_id, string theme, string room_name){
+            var uuid_596b5288_d0f2_52ea_802a_a61621d93808 = (UInt32)Interlocked.Increment(ref uuid_24ac4ad1_da15_3ab8_b145_66592d61f431);
+
+            var _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee = new List<MsgPack.MessagePackObject>();
+            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(uuid_596b5288_d0f2_52ea_802a_a61621d93808);
+            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(user_id);
+            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(chat_id);
+            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(theme);
+            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(room_name);
+            call_module_method("gate_call_room_create_room", _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee);
+
+            var cb_create_room_obj = new gate_call_room_create_room_cb(uuid_596b5288_d0f2_52ea_802a_a61621d93808, rsp_cb_gate_call_room_handle);
+            lock(rsp_cb_gate_call_room_handle.map_create_room)
+            {
+                rsp_cb_gate_call_room_handle.map_create_room.Add(uuid_596b5288_d0f2_52ea_802a_a61621d93808, cb_create_room_obj);
+            }
+            return cb_create_room_obj;
+        }
+
+        public gate_call_room_join_room_cb join_room(string user_id, string chat_id, string room_id){
+            var uuid_7d1a7e2e_e50d_5c5f_a3e7_9e9333ac2e8d = (UInt32)Interlocked.Increment(ref uuid_24ac4ad1_da15_3ab8_b145_66592d61f431);
+
+            var _argv_ec52957c_a034_3900_98a3_cd55293c7ef2 = new List<MsgPack.MessagePackObject>();
+            _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(uuid_7d1a7e2e_e50d_5c5f_a3e7_9e9333ac2e8d);
+            _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(user_id);
+            _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(chat_id);
+            _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(room_id);
+            call_module_method("gate_call_room_join_room", _argv_ec52957c_a034_3900_98a3_cd55293c7ef2);
+
+            var cb_join_room_obj = new gate_call_room_join_room_cb(uuid_7d1a7e2e_e50d_5c5f_a3e7_9e9333ac2e8d, rsp_cb_gate_call_room_handle);
+            lock(rsp_cb_gate_call_room_handle.map_join_room)
+            {
+                rsp_cb_gate_call_room_handle.map_join_room.Add(uuid_7d1a7e2e_e50d_5c5f_a3e7_9e9333ac2e8d, cb_join_room_obj);
+            }
+            return cb_join_room_obj;
+        }
+
+        public gate_call_room_match_room_cb match_room(string user_id, string chat_id, string theme){
+            var uuid_98375ffb_e90b_5533_b9a9_c0dcd55fa179 = (UInt32)Interlocked.Increment(ref uuid_24ac4ad1_da15_3ab8_b145_66592d61f431);
+
+            var _argv_7be997e8_0e81_3728_9f6b_2f2429d08950 = new List<MsgPack.MessagePackObject>();
+            _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(uuid_98375ffb_e90b_5533_b9a9_c0dcd55fa179);
+            _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(user_id);
+            _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(chat_id);
+            _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(theme);
+            call_module_method("gate_call_room_match_room", _argv_7be997e8_0e81_3728_9f6b_2f2429d08950);
+
+            var cb_match_room_obj = new gate_call_room_match_room_cb(uuid_98375ffb_e90b_5533_b9a9_c0dcd55fa179, rsp_cb_gate_call_room_handle);
+            lock(rsp_cb_gate_call_room_handle.map_match_room)
+            {
+                rsp_cb_gate_call_room_handle.map_match_room.Add(uuid_98375ffb_e90b_5533_b9a9_c0dcd55fa179, cb_match_room_obj);
+            }
+            return cb_match_room_obj;
+        }
+
+        public void speak(string user_id, string speak_json){
+            var _argv_3635964a_2b13_34f8_a743_76afee0ec761 = new List<MsgPack.MessagePackObject>();
+            _argv_3635964a_2b13_34f8_a743_76afee0ec761.Add(user_id);
+            _argv_3635964a_2b13_34f8_a743_76afee0ec761.Add(speak_json);
+            call_module_method("gate_call_room_speak", _argv_3635964a_2b13_34f8_a743_76afee0ec761);
+        }
+
+    }
     public class hub_call_hub_reg_hub_cb
     {
         private UInt64 cb_uuid;
@@ -532,6 +912,139 @@ namespace Abelkhan
             var _target_hub = ((MsgPack.MessagePackObject)inArray[1]).AsString();
             if (on_migrate_client != null){
                 on_migrate_client(_client_uuid, _target_hub);
+            }
+        }
+
+    }
+    public class gate_call_room_create_room_rsp : Abelkhan.Response {
+        private UInt64 uuid_23854e65_5189_3f0a_a35a_e9ce5a5cd896;
+        public gate_call_room_create_room_rsp(Abelkhan.Ichannel _ch, UInt64 _uuid) : base("gate_call_room_rsp_cb", _ch)
+        {
+            uuid_23854e65_5189_3f0a_a35a_e9ce5a5cd896 = _uuid;
+        }
+
+        public void rsp(string room_id_23a611c3_17ce_35ff_9f9b_8e3b1cd4c568){
+            var _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee = new List<MsgPack.MessagePackObject>();
+            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(uuid_23854e65_5189_3f0a_a35a_e9ce5a5cd896);
+            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(room_id_23a611c3_17ce_35ff_9f9b_8e3b1cd4c568);
+            call_module_method("gate_call_room_rsp_cb_create_room_rsp", _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee);
+        }
+
+        public void err(Int32 err_code_3d12aba6_1dd0_305b_bdbe_29145b62fbf3){
+            var _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee = new List<MsgPack.MessagePackObject>();
+            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(uuid_23854e65_5189_3f0a_a35a_e9ce5a5cd896);
+            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(err_code_3d12aba6_1dd0_305b_bdbe_29145b62fbf3);
+            call_module_method("gate_call_room_rsp_cb_create_room_err", _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee);
+        }
+
+    }
+
+    public class gate_call_room_join_room_rsp : Abelkhan.Response {
+        private UInt64 uuid_6e02bfb4_d123_329c_ba0e_83177d046a8c;
+        public gate_call_room_join_room_rsp(Abelkhan.Ichannel _ch, UInt64 _uuid) : base("gate_call_room_rsp_cb", _ch)
+        {
+            uuid_6e02bfb4_d123_329c_ba0e_83177d046a8c = _uuid;
+        }
+
+        public void rsp(string theme_de7bffbf_9322_3919_82fe_0b6fb2103fb8, string room_name_b184ba68_7ed2_3a68_9cf3_97573edb6681){
+            var _argv_ec52957c_a034_3900_98a3_cd55293c7ef2 = new List<MsgPack.MessagePackObject>();
+            _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(uuid_6e02bfb4_d123_329c_ba0e_83177d046a8c);
+            _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(theme_de7bffbf_9322_3919_82fe_0b6fb2103fb8);
+            _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(room_name_b184ba68_7ed2_3a68_9cf3_97573edb6681);
+            call_module_method("gate_call_room_rsp_cb_join_room_rsp", _argv_ec52957c_a034_3900_98a3_cd55293c7ef2);
+        }
+
+        public void err(Int32 err_code_3d12aba6_1dd0_305b_bdbe_29145b62fbf3){
+            var _argv_ec52957c_a034_3900_98a3_cd55293c7ef2 = new List<MsgPack.MessagePackObject>();
+            _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(uuid_6e02bfb4_d123_329c_ba0e_83177d046a8c);
+            _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(err_code_3d12aba6_1dd0_305b_bdbe_29145b62fbf3);
+            call_module_method("gate_call_room_rsp_cb_join_room_err", _argv_ec52957c_a034_3900_98a3_cd55293c7ef2);
+        }
+
+    }
+
+    public class gate_call_room_match_room_rsp : Abelkhan.Response {
+        private UInt64 uuid_dbf154a2_3b9f_351b_bea1_93da35e3c902;
+        public gate_call_room_match_room_rsp(Abelkhan.Ichannel _ch, UInt64 _uuid) : base("gate_call_room_rsp_cb", _ch)
+        {
+            uuid_dbf154a2_3b9f_351b_bea1_93da35e3c902 = _uuid;
+        }
+
+        public void rsp(string room_id_23a611c3_17ce_35ff_9f9b_8e3b1cd4c568, string theme_de7bffbf_9322_3919_82fe_0b6fb2103fb8, string room_name_b184ba68_7ed2_3a68_9cf3_97573edb6681){
+            var _argv_7be997e8_0e81_3728_9f6b_2f2429d08950 = new List<MsgPack.MessagePackObject>();
+            _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(uuid_dbf154a2_3b9f_351b_bea1_93da35e3c902);
+            _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(room_id_23a611c3_17ce_35ff_9f9b_8e3b1cd4c568);
+            _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(theme_de7bffbf_9322_3919_82fe_0b6fb2103fb8);
+            _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(room_name_b184ba68_7ed2_3a68_9cf3_97573edb6681);
+            call_module_method("gate_call_room_rsp_cb_match_room_rsp", _argv_7be997e8_0e81_3728_9f6b_2f2429d08950);
+        }
+
+        public void err(Int32 err_code_3d12aba6_1dd0_305b_bdbe_29145b62fbf3){
+            var _argv_7be997e8_0e81_3728_9f6b_2f2429d08950 = new List<MsgPack.MessagePackObject>();
+            _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(uuid_dbf154a2_3b9f_351b_bea1_93da35e3c902);
+            _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(err_code_3d12aba6_1dd0_305b_bdbe_29145b62fbf3);
+            call_module_method("gate_call_room_rsp_cb_match_room_err", _argv_7be997e8_0e81_3728_9f6b_2f2429d08950);
+        }
+
+    }
+
+    public class gate_call_room_module : Abelkhan.Imodule {
+        private Abelkhan.modulemng modules;
+        public gate_call_room_module(Abelkhan.modulemng _modules) : base("gate_call_room")
+        {
+            modules = _modules;
+            modules.reg_method("gate_call_room_create_room", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, create_room));
+            modules.reg_method("gate_call_room_join_room", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, join_room));
+            modules.reg_method("gate_call_room_match_room", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, match_room));
+            modules.reg_method("gate_call_room_speak", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, speak));
+        }
+
+        public event Action<string, string, string, string> on_create_room;
+        public void create_room(IList<MsgPack.MessagePackObject> inArray){
+            var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _user_id = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            var _chat_id = ((MsgPack.MessagePackObject)inArray[2]).AsString();
+            var _theme = ((MsgPack.MessagePackObject)inArray[3]).AsString();
+            var _room_name = ((MsgPack.MessagePackObject)inArray[4]).AsString();
+            rsp.Value = new gate_call_room_create_room_rsp(current_ch.Value, _cb_uuid);
+            if (on_create_room != null){
+                on_create_room(_user_id, _chat_id, _theme, _room_name);
+            }
+            rsp.Value = null;
+        }
+
+        public event Action<string, string, string> on_join_room;
+        public void join_room(IList<MsgPack.MessagePackObject> inArray){
+            var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _user_id = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            var _chat_id = ((MsgPack.MessagePackObject)inArray[2]).AsString();
+            var _room_id = ((MsgPack.MessagePackObject)inArray[3]).AsString();
+            rsp.Value = new gate_call_room_join_room_rsp(current_ch.Value, _cb_uuid);
+            if (on_join_room != null){
+                on_join_room(_user_id, _chat_id, _room_id);
+            }
+            rsp.Value = null;
+        }
+
+        public event Action<string, string, string> on_match_room;
+        public void match_room(IList<MsgPack.MessagePackObject> inArray){
+            var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _user_id = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            var _chat_id = ((MsgPack.MessagePackObject)inArray[2]).AsString();
+            var _theme = ((MsgPack.MessagePackObject)inArray[3]).AsString();
+            rsp.Value = new gate_call_room_match_room_rsp(current_ch.Value, _cb_uuid);
+            if (on_match_room != null){
+                on_match_room(_user_id, _chat_id, _theme);
+            }
+            rsp.Value = null;
+        }
+
+        public event Action<string, string> on_speak;
+        public void speak(IList<MsgPack.MessagePackObject> inArray){
+            var _user_id = ((MsgPack.MessagePackObject)inArray[0]).AsString();
+            var _speak_json = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            if (on_speak != null){
+                on_speak(_user_id, _speak_json);
             }
         }
 
