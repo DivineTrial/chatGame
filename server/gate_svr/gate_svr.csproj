@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="create_room_handle.cs~RF48eb3a8.TMP" />
+    <None Remove="create_room_handle.cs~RF48fa53c.TMP" />
+    <None Remove="Program.cs~RF48d7358.TMP" />
+    <None Remove="Program.cs~RF4942ecb.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\component\gate\gate.csproj" />
   </ItemGroup>
 

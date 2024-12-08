@@ -16,19 +16,23 @@ namespace Gate {
 
         public name_info gate_name_info;
 
-	    private uint reconn_count;
+        private uint reconn_count;
         private uint tick;
 
         private readonly Config _root_config;
         private readonly Config _center_config;
         private readonly Config _config;
+        public Config Config
+        {
+            get { return _root_config; }
+        }
 
         private readonly Service.Timerservice _timerservice;
-        private readonly HubSvrManager _hubsvrmanager;
+        public readonly HubSvrManager _hubsvrmanager;
         private readonly ClientManager _clientmanager;
 
         private readonly Abelkhan.RedisMQ _hub_redismq_service;
-        private readonly Abelkhan.RedisHandle _redis_handle;
+        public readonly Abelkhan.RedisHandle _redis_handle;
         private readonly Abelkhan.Acceptservice _hub_service;
 
         private CenterProxy _centerproxy;

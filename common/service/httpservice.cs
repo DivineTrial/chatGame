@@ -24,13 +24,11 @@ namespace Service
         public HttpRequest req;
         public HttpResponse rsp;
         public byte[] Content;
-        public int length;
 
-        public AbelkhanHttpRequest(HttpRequest _req, HttpResponse _rsp, byte[] _Content, int _length) {
+        public AbelkhanHttpRequest(HttpRequest _req, HttpResponse _rsp, byte[] _Content) {
             req = _req;
             rsp = _rsp;
             Content = _Content;
-            length = _length;
         }
 
         public ValueTask Response(int status /*Microsoft.AspNetCore.Http.StatusCodes*/, Dictionary<string, string> headers, byte[] buf) {
@@ -99,7 +97,7 @@ namespace Service
                 try {
                     if (context.Request.ContentLength != null) {
                         length = (int)context.Request.ContentLength;
-                        buf = ArrayPool<byte>.Shared.Rent(length);
+                        buf = new byte[length];
                         int offset = 0;
                         while (true) {
                             var len = await context.Request.Body.ReadAsync(buf, offset, length - offset);
@@ -109,7 +107,7 @@ namespace Service
                             offset += len;
                         }
                     }
-                    await cb(new AbelkhanHttpRequest(context.Request, context.Response, buf, length));
+                    await cb(new AbelkhanHttpRequest(context.Request, context.Response, buf));
                 } catch (Exception ex) {
                     Log.Log.err("process http req ex:{0}", ex);
                 } finally {

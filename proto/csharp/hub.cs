@@ -429,9 +429,10 @@ namespace Abelkhan
             return cb_match_room_obj;
         }
 
-        public void speak(string user_id, string speak_json){
+        public void speak(string user_id, string room_id, string speak_json){
             var _argv_3635964a_2b13_34f8_a743_76afee0ec761 = new List<MsgPack.MessagePackObject>();
             _argv_3635964a_2b13_34f8_a743_76afee0ec761.Add(user_id);
+            _argv_3635964a_2b13_34f8_a743_76afee0ec761.Add(room_id);
             _argv_3635964a_2b13_34f8_a743_76afee0ec761.Add(speak_json);
             call_module_method("gate_call_room_speak", _argv_3635964a_2b13_34f8_a743_76afee0ec761);
         }
@@ -1039,12 +1040,13 @@ namespace Abelkhan
             rsp.Value = null;
         }
 
-        public event Action<string, string> on_speak;
+        public event Action<string, string, string> on_speak;
         public void speak(IList<MsgPack.MessagePackObject> inArray){
             var _user_id = ((MsgPack.MessagePackObject)inArray[0]).AsString();
-            var _speak_json = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            var _room_id = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            var _speak_json = ((MsgPack.MessagePackObject)inArray[2]).AsString();
             if (on_speak != null){
-                on_speak(_user_id, _speak_json);
+                on_speak(_user_id, _room_id, _speak_json);
             }
         }
 

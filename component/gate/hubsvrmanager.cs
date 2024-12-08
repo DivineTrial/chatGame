@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Gate
 {
-
 	public class HubProxy
     {
         public uint _tick_time;
@@ -15,8 +14,16 @@ namespace Gate
 		public readonly Abelkhan.Ichannel _ch;
 
 		private readonly Abelkhan.gate_call_hub_caller _gate_call_hub_caller;
+		private readonly Abelkhan.gate_call_room_caller _gate_call_room_caller;
+        public Abelkhan.gate_call_room_caller RoomCaller
+		{
+			get
+			{
+				return _gate_call_room_caller;
+			}
+		}
 
-		public HubProxy(string hub_name, string hub_type, string router_type, Abelkhan.Ichannel ch) {
+        public HubProxy(string hub_name, string hub_type, string router_type, Abelkhan.Ichannel ch) {
 			_tick_time = 0;
 
 			_hub_name = hub_name;
@@ -25,7 +32,9 @@ namespace Gate
             _ch = ch;
 
 			_gate_call_hub_caller = new Abelkhan.gate_call_hub_caller(_ch, Abelkhan.ModuleMgrHandle._modulemng);
-		}
+            _gate_call_room_caller = new Abelkhan.gate_call_room_caller(_ch, Abelkhan.ModuleMgrHandle._modulemng);
+
+        }
 
 		public void client_disconnect(string client_cuuid) {
 			_gate_call_hub_caller.client_disconnect(client_cuuid);
@@ -130,6 +139,35 @@ namespace Gate
             }
 
             return hub_name;
+        }
+
+		public bool get_hub_proxy(string hub_type, out HubProxy _proxy)
+		{
+			var hub_list = new List<HubProxy>();
+			foreach (var it in hub_name_proxy)
+			{
+				if (it.Value._hub_type != hub_type)
+				{
+					continue;
+				}
+				if (it.Value._tick_time > 50)
+				{
+					continue;
+				}
+
+				hub_list.Add(it.Value);
+            }
+
+			_proxy = null;
+            if (hub_list.Count > 0)
+            {
+                var index = rd.Next(hub_list.Count);
+                _proxy = hub_list[index];
+
+                return true;
+            }
+
+            return false;
         }
 
 		public bool get_hub_list(string client_uuid, string hub_type, out Abelkhan.hub_info _info)
