@@ -374,13 +374,12 @@ namespace Abelkhan
             }
         }
 
-        public gate_call_room_create_room_cb create_room(string user_id, string chat_id, string theme, string room_name){
+        public gate_call_room_create_room_cb create_room(string user_id, string theme, string room_name){
             var uuid_596b5288_d0f2_52ea_802a_a61621d93808 = (UInt32)Interlocked.Increment(ref uuid_24ac4ad1_da15_3ab8_b145_66592d61f431);
 
             var _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee = new List<MsgPack.MessagePackObject>();
             _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(uuid_596b5288_d0f2_52ea_802a_a61621d93808);
             _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(user_id);
-            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(chat_id);
             _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(theme);
             _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(room_name);
             call_module_method("gate_call_room_create_room", _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee);
@@ -393,13 +392,12 @@ namespace Abelkhan
             return cb_create_room_obj;
         }
 
-        public gate_call_room_join_room_cb join_room(string user_id, string chat_id, string room_id){
+        public gate_call_room_join_room_cb join_room(string user_id, string room_id){
             var uuid_7d1a7e2e_e50d_5c5f_a3e7_9e9333ac2e8d = (UInt32)Interlocked.Increment(ref uuid_24ac4ad1_da15_3ab8_b145_66592d61f431);
 
             var _argv_ec52957c_a034_3900_98a3_cd55293c7ef2 = new List<MsgPack.MessagePackObject>();
             _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(uuid_7d1a7e2e_e50d_5c5f_a3e7_9e9333ac2e8d);
             _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(user_id);
-            _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(chat_id);
             _argv_ec52957c_a034_3900_98a3_cd55293c7ef2.Add(room_id);
             call_module_method("gate_call_room_join_room", _argv_ec52957c_a034_3900_98a3_cd55293c7ef2);
 
@@ -411,13 +409,12 @@ namespace Abelkhan
             return cb_join_room_obj;
         }
 
-        public gate_call_room_match_room_cb match_room(string user_id, string chat_id, string theme){
+        public gate_call_room_match_room_cb match_room(string user_id, string theme){
             var uuid_98375ffb_e90b_5533_b9a9_c0dcd55fa179 = (UInt32)Interlocked.Increment(ref uuid_24ac4ad1_da15_3ab8_b145_66592d61f431);
 
             var _argv_7be997e8_0e81_3728_9f6b_2f2429d08950 = new List<MsgPack.MessagePackObject>();
             _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(uuid_98375ffb_e90b_5533_b9a9_c0dcd55fa179);
             _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(user_id);
-            _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(chat_id);
             _argv_7be997e8_0e81_3728_9f6b_2f2429d08950.Add(theme);
             call_module_method("gate_call_room_match_room", _argv_7be997e8_0e81_3728_9f6b_2f2429d08950);
 
@@ -1000,42 +997,39 @@ namespace Abelkhan
             modules.reg_method("gate_call_room_speak", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, speak));
         }
 
-        public event Action<string, string, string, string> on_create_room;
+        public event Action<string, string, string> on_create_room;
         public void create_room(IList<MsgPack.MessagePackObject> inArray){
             var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
             var _user_id = ((MsgPack.MessagePackObject)inArray[1]).AsString();
-            var _chat_id = ((MsgPack.MessagePackObject)inArray[2]).AsString();
-            var _theme = ((MsgPack.MessagePackObject)inArray[3]).AsString();
-            var _room_name = ((MsgPack.MessagePackObject)inArray[4]).AsString();
+            var _theme = ((MsgPack.MessagePackObject)inArray[2]).AsString();
+            var _room_name = ((MsgPack.MessagePackObject)inArray[3]).AsString();
             rsp.Value = new gate_call_room_create_room_rsp(current_ch.Value, _cb_uuid);
             if (on_create_room != null){
-                on_create_room(_user_id, _chat_id, _theme, _room_name);
+                on_create_room(_user_id, _theme, _room_name);
             }
             rsp.Value = null;
         }
 
-        public event Action<string, string, string> on_join_room;
+        public event Action<string, string> on_join_room;
         public void join_room(IList<MsgPack.MessagePackObject> inArray){
             var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
             var _user_id = ((MsgPack.MessagePackObject)inArray[1]).AsString();
-            var _chat_id = ((MsgPack.MessagePackObject)inArray[2]).AsString();
-            var _room_id = ((MsgPack.MessagePackObject)inArray[3]).AsString();
+            var _room_id = ((MsgPack.MessagePackObject)inArray[2]).AsString();
             rsp.Value = new gate_call_room_join_room_rsp(current_ch.Value, _cb_uuid);
             if (on_join_room != null){
-                on_join_room(_user_id, _chat_id, _room_id);
+                on_join_room(_user_id, _room_id);
             }
             rsp.Value = null;
         }
 
-        public event Action<string, string, string> on_match_room;
+        public event Action<string, string> on_match_room;
         public void match_room(IList<MsgPack.MessagePackObject> inArray){
             var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
             var _user_id = ((MsgPack.MessagePackObject)inArray[1]).AsString();
-            var _chat_id = ((MsgPack.MessagePackObject)inArray[2]).AsString();
-            var _theme = ((MsgPack.MessagePackObject)inArray[3]).AsString();
+            var _theme = ((MsgPack.MessagePackObject)inArray[2]).AsString();
             rsp.Value = new gate_call_room_match_room_rsp(current_ch.Value, _cb_uuid);
             if (on_match_room != null){
-                on_match_room(_user_id, _chat_id, _theme);
+                on_match_room(_user_id, _theme);
             }
             rsp.Value = null;
         }

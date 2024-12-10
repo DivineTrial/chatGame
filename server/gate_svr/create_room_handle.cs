@@ -7,7 +7,6 @@ namespace gate_svr
     public class CreateRoomRequest
     {
         public string UserID = string.Empty;
-        public string ChatID = string.Empty;
         public string Theme = string.Empty;
         public string RoomName = string.Empty;
     }
@@ -37,7 +36,7 @@ namespace gate_svr
                 var request = Newtonsoft.Json.JsonConvert.DeserializeObject<CreateRoomRequest>(json);
                 if (request != null)
                 {
-                    _p.RoomCaller.create_room(request.UserID, request.ChatID, request.Theme, request.RoomName).callBack(async (room_id) =>
+                    _p.RoomCaller.create_room(request.UserID, request.Theme, request.RoomName).callBack(async (room_id) =>
                     {
                         _roommanager.req_hub(room_id, _p);
 

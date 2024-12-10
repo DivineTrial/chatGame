@@ -9,6 +9,7 @@ namespace Abelkhan
 /*this enum code is codegen by Abelkhan codegen for c#*/
 
     public enum framework_error{
+        enum_create_room_error = -2,
         enum_framework_timeout = -1,
         enum_framework_success = 0,
         enum_framework_client_not_exist = 1,
