@@ -92,12 +92,10 @@ namespace Service
                     return;
                 }
 
-                byte[] buf = null;
-                int length = 0;
                 try {
                     if (context.Request.ContentLength != null) {
-                        length = (int)context.Request.ContentLength;
-                        buf = new byte[length];
+                        var length = (int)context.Request.ContentLength;
+                        var buf = new byte[length];
                         int offset = 0;
                         while (true) {
                             var len = await context.Request.Body.ReadAsync(buf, offset, length - offset);
@@ -106,15 +104,11 @@ namespace Service
                             }
                             offset += len;
                         }
+                        await cb(new AbelkhanHttpRequest(context.Request, context.Response, buf));
                     }
-                    await cb(new AbelkhanHttpRequest(context.Request, context.Response, buf));
                 } catch (Exception ex) {
                     Log.Log.err("process http req ex:{0}", ex);
                 } finally {
-                    if (buf != null) {
-                        ArrayPool<byte>.Shared.Return(buf);
-                    }
-
                     var tick = Timerservice.Tick - begin;
                     if (tick > 1000) {
                         Log.Log.err("Timeout: elapsed_ticks={0}", tick);

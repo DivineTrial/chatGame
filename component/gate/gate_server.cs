@@ -24,7 +24,7 @@ namespace Gate {
         private readonly Config _config;
         public Config Config
         {
-            get { return _root_config; }
+            get { return _config; }
         }
 
         private readonly Service.Timerservice _timerservice;

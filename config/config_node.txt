@@ -1,0 +1,39 @@
+{
+    "center":{
+		"name":"center",
+        "gm_ip":"127.0.0.1",
+        "gm_port":1001,
+		"log_level":"trace",
+		"log_file":"center.txt",
+		"log_dir":"./log/"
+    },
+
+    "dbproxy":{
+		"name":"dbproxy",
+		"db_url":"mongodb://127.0.0.1:27017",
+		"log_level":"trace",
+		"log_file":"dbproxy.txt",
+		"log_dir":"./log/"
+    },
+
+    "gate":{
+		"name":"gate",
+		"http_outside_host":"0.0.0.0",
+		"http_outside_port":444,
+		"log_level":"trace",
+		"log_file":"gate.txt",
+		"log_dir":"./log/"
+    },
+
+	"room":{
+		"name":"room",
+		"log_level":"trace",
+		"log_file":"room.txt",
+		"log_dir":"./log/"
+    },
+	
+	"redismq_listen": true,
+	"redismq_is_cluster": false,
+	"redis_for_mq": "127.0.0.1:6379",
+	"redis_for_cache": "127.0.0.1:6379"
+}
