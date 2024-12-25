@@ -36,6 +36,8 @@ namespace gate_svr
                 var request = Newtonsoft.Json.JsonConvert.DeserializeObject<CreateRoomRequest>(json);
                 if (request != null)
                 {
+                    var task = new TaskCompletionSource();
+
                     _p.RoomCaller.create_room(request.UserID, request.Theme, request.RoomName).callBack(async (room_id) =>
                     {
                         _roommanager.req_hub(room_id, _p);
@@ -50,6 +52,7 @@ namespace gate_svr
                         var json_str = Newtonsoft.Json.JsonConvert.SerializeObject(rsp);
                         var json_bytes = System.Text.Encoding.UTF8.GetBytes(json_str);
                         await req.Response(status, hearders, json_bytes);
+                        task.SetResult();
                     }, async (err) =>
                     {
                         var status = Microsoft.AspNetCore.Http.StatusCodes.Status200OK;
@@ -62,7 +65,9 @@ namespace gate_svr
                         var json_str = Newtonsoft.Json.JsonConvert.SerializeObject(rsp);
                         var json_bytes = System.Text.Encoding.UTF8.GetBytes(json_str);
                         await req.Response(status, hearders, json_bytes);
+                        task.SetResult();
                     });
+                    await task.Task;
                     return;
                 }
             }

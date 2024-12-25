@@ -16,6 +16,9 @@ namespace Room
                 _hub.closeSvr();
             };
 
+            var _rooms = new RoomManager();
+            var _room_msg_handle = new RoomMsgHandle(_rooms);
+
             Log.Log.trace("player start ok");
 
             _hub.run().Wait();
