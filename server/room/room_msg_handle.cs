@@ -38,7 +38,7 @@ namespace Room
             Log.Log.trace("on_speak end!");
         }
 
-        private void _gate_call_room_module_on_create_room(string UserID, string Theme, string RoomName)
+        private void _gate_call_room_module_on_create_room(string roomId, string UserID, string Theme, string RoomName)
         {
             Log.Log.trace("on_create_room begin!");
 
@@ -47,8 +47,8 @@ namespace Room
                 var rsp = (Abelkhan.gate_call_room_create_room_rsp)_gate_call_room_module.rsp.Value;
                 try
                 {
-                    var roomId = rooms.CreateRoom(UserID, Theme, RoomName);
-                    rsp.rsp(roomId);
+                    rooms.CreateRoom(roomId, UserID, Theme, RoomName);
+                    rsp.rsp();
                 }
                 catch (System.Exception err)
                 {

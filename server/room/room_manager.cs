@@ -60,9 +60,9 @@ namespace Room
         public List<ChatUser> userList;
         public int curr_speak_index = 0;
 
-        public ChatRoom(string _userId, string _theme, string _roomName)
+        public ChatRoom(string _roomId, string _userId, string _theme, string _roomName)
         {
-            roomId = Guid.NewGuid().ToString();
+            roomId = _roomId;
             Theme = _theme;
             RoomName = _roomName;
 
@@ -99,9 +99,9 @@ namespace Room
             rooms = new Dictionary<string, ChatRoom>();
         }
 
-        public string CreateRoom(string _userId, string Theme, string RoomName)
+        public string CreateRoom(string _roomId, string _userId, string Theme, string RoomName)
         {
-            var room = new ChatRoom(_userId, Theme, RoomName);
+            var room = new ChatRoom(_roomId, _userId, Theme, RoomName);
             rooms[room.roomId] = room;
             return room.roomId;
         }

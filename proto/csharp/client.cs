@@ -12,7 +12,7 @@ namespace Abelkhan
 /*this caller code is codegen by Abelkhan codegen for c#*/
 /*this cb code is codegen by Abelkhan for c#*/
     public class gate_call_client_rsp_cb : Abelkhan.Imodule {
-        public gate_call_client_rsp_cb(Abelkhan.modulemng modules) : base("gate_call_client_rsp_cb")
+        public gate_call_client_rsp_cb(Abelkhan.ModuleMng modules) : base("gate_call_client_rsp_cb")
         {
         }
 
@@ -22,7 +22,7 @@ namespace Abelkhan
         public static gate_call_client_rsp_cb rsp_cb_gate_call_client_handle = null;
         private Int32 uuid_b84dd831_2e79_3280_a337_a69dd489e75f = (Int32)RandomUUID.random();
 
-        public gate_call_client_caller(Abelkhan.Ichannel _ch, Abelkhan.modulemng modules) : base("gate_call_client", _ch)
+        public gate_call_client_caller(Abelkhan.Ichannel _ch, Abelkhan.ModuleMng modules) : base("gate_call_client", _ch)
         {
             if (rsp_cb_gate_call_client_handle == null)
             {
@@ -72,8 +72,8 @@ namespace Abelkhan
     }
 /*this module code is codegen by Abelkhan codegen for c#*/
     public class gate_call_client_module : Abelkhan.Imodule {
-        private Abelkhan.modulemng modules;
-        public gate_call_client_module(Abelkhan.modulemng _modules) : base("gate_call_client")
+        private Abelkhan.ModuleMng modules;
+        public gate_call_client_module(Abelkhan.ModuleMng _modules) : base("gate_call_client")
         {
             modules = _modules;
             modules.reg_method("gate_call_client_ntf_cuuid", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, ntf_cuuid));

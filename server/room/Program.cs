@@ -1,6 +1,5 @@
 ﻿using Abelkhan;
 
-
 namespace Room
 {
     class Room

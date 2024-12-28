@@ -1,5 +1,6 @@
 ﻿using Abelkhan;
 using Gate;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Service;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -10,14 +11,28 @@ namespace gate_svr
         private Gate.GateService _gate;
         private Dictionary<string, HubProxy> RoomHubProxy = new();
 
+        private SortedVector<string, HubProxy> RoomHashList = new ();
+
         public RoomManager(Gate.GateService gate)
         {
             _gate = gate;
         }
 
-        public void req_hub(string roomId, HubProxy _p)
+        public void init_hub(HubProxy _p)
+        {
+            RoomHashList.Add(_p._hub_name, _p);
+        }
+
+        public bool HashHubProxy(string roomId, out HubProxy _proxy)
+        {
+            var index = roomId.GetHashCode() % RoomHashList.Count();
+            return RoomHashList.TryGetValueByIndex(index, out _proxy);
+        }
+
+        public async Task req_hub(string roomId, HubProxy _p)
         {
             RoomHubProxy.Add(roomId, _p);
+            await _gate._redis_handle.SetStrData(roomId, _p._hub_name);
         }
 
         public async Task<HubProxy?> get_hub(string roomId)
@@ -57,7 +72,15 @@ namespace gate_svr
 
             var rooms = new RoomManager(_gate);
 
-            var createRoomHandle = new CreateRoomHandle(_gate._hubsvrmanager, rooms);
+            _gate.on_hubproxy += (_p) =>
+            {
+                if (_p._hub_type == "Room")
+                {
+                    rooms.init_hub(_p);
+                }
+            };
+
+            var createRoomHandle = new CreateRoomHandle(rooms);
             Service.HttpService.post("/create_room_handle", createRoomHandle.DoCreateRoom);
 
             var speakHandle = new SpeakHandle(_gate._hubsvrmanager, rooms);

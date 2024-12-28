@@ -173,9 +173,9 @@ namespace Abelkhan
 		public string module_name;
     }
 
-    public class modulemng
+    public class ModuleMng
     {
-		public modulemng()
+		public ModuleMng()
 		{
 			method_set = new Dictionary<string, Tuple<Imodule, Action<IList<MsgPack.MessagePackObject> > > >();
 		}

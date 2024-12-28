@@ -9,6 +9,79 @@ namespace Abelkhan
 /*this enum code is codegen by Abelkhan codegen for c#*/
 
 /*this struct code is codegen by Abelkhan codegen for c#*/
+    public class ChatUser
+    {
+        public bool isAI;
+        public string userId;
+        public string roomId;
+        public static MsgPack.MessagePackObjectDictionary ChatUser_to_protcol(ChatUser _struct){
+            var _protocol = new MsgPack.MessagePackObjectDictionary();
+            _protocol.Add("isAI", _struct.isAI);
+            _protocol.Add("userId", _struct.userId);
+            _protocol.Add("roomId", _struct.roomId);
+            return _protocol;
+        }
+        public static ChatUser protcol_to_ChatUser(MsgPack.MessagePackObjectDictionary _protocol){
+            var _struct6da34274_f5e6_3f23_801c_3729f92ea8cc = new ChatUser();
+            foreach (var i in _protocol){
+                if (((MsgPack.MessagePackObject)i.Key).AsString() == "isAI"){
+                    _struct6da34274_f5e6_3f23_801c_3729f92ea8cc.isAI = ((MsgPack.MessagePackObject)i.Value).AsBoolean();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "userId"){
+                    _struct6da34274_f5e6_3f23_801c_3729f92ea8cc.userId = ((MsgPack.MessagePackObject)i.Value).AsString();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "roomId"){
+                    _struct6da34274_f5e6_3f23_801c_3729f92ea8cc.roomId = ((MsgPack.MessagePackObject)i.Value).AsString();
+                }
+            }
+            return _struct6da34274_f5e6_3f23_801c_3729f92ea8cc;
+        }
+    }
+
+    public class ChatRoom
+    {
+        public string roomId;
+        public string Theme;
+        public string RoomName;
+        public List<ChatUser> userList;
+        public static MsgPack.MessagePackObjectDictionary ChatRoom_to_protcol(ChatRoom _struct){
+            var _protocol = new MsgPack.MessagePackObjectDictionary();
+            _protocol.Add("roomId", _struct.roomId);
+            _protocol.Add("Theme", _struct.Theme);
+            _protocol.Add("RoomName", _struct.RoomName);
+            if (_struct.userList != null) {
+                var _array_userList = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.userList){
+                    _array_userList.Add( MsgPack.MessagePackObject.FromObject(ChatUser.ChatUser_to_protcol(v_)));
+                }
+                _protocol.Add("userList", MsgPack.MessagePackObject.FromObject(_array_userList));
+            }
+            return _protocol;
+        }
+        public static ChatRoom protcol_to_ChatRoom(MsgPack.MessagePackObjectDictionary _protocol){
+            var _struct6899c4da_23cd_3177_85a2_0c524d860b34 = new ChatRoom();
+            foreach (var i in _protocol){
+                if (((MsgPack.MessagePackObject)i.Key).AsString() == "roomId"){
+                    _struct6899c4da_23cd_3177_85a2_0c524d860b34.roomId = ((MsgPack.MessagePackObject)i.Value).AsString();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "Theme"){
+                    _struct6899c4da_23cd_3177_85a2_0c524d860b34.Theme = ((MsgPack.MessagePackObject)i.Value).AsString();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "RoomName"){
+                    _struct6899c4da_23cd_3177_85a2_0c524d860b34.RoomName = ((MsgPack.MessagePackObject)i.Value).AsString();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "userList"){
+                    _struct6899c4da_23cd_3177_85a2_0c524d860b34.userList = new();
+                    var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
+                    foreach (var v_ in _protocol_array){
+                        _struct6899c4da_23cd_3177_85a2_0c524d860b34.userList.Add(ChatUser.protcol_to_ChatUser(((MsgPack.MessagePackObject)v_).AsDictionary()));
+                    }
+                }
+            }
+            return _struct6899c4da_23cd_3177_85a2_0c524d860b34;
+        }
+    }
+
 /*this caller code is codegen by Abelkhan codegen for c#*/
     public class hub_call_dbproxy_reg_hub_cb
     {
@@ -411,7 +484,7 @@ namespace Abelkhan
         public Dictionary<UInt64, hub_call_dbproxy_find_and_modify_cb> map_find_and_modify;
         public Dictionary<UInt64, hub_call_dbproxy_remove_object_cb> map_remove_object;
         public Dictionary<UInt64, hub_call_dbproxy_get_object_count_cb> map_get_object_count;
-        public hub_call_dbproxy_rsp_cb(Abelkhan.modulemng modules) : base("hub_call_dbproxy_rsp_cb")
+        public hub_call_dbproxy_rsp_cb(Abelkhan.ModuleMng modules) : base("hub_call_dbproxy_rsp_cb")
         {
             map_reg_hub = new Dictionary<UInt64, hub_call_dbproxy_reg_hub_cb>();
             modules.reg_method("hub_call_dbproxy_rsp_cb_reg_hub_rsp", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, reg_hub_rsp));
@@ -697,7 +770,7 @@ namespace Abelkhan
         public static hub_call_dbproxy_rsp_cb rsp_cb_hub_call_dbproxy_handle = null;
         private Int32 uuid_e713438c_e791_3714_ad31_4ccbddee2554 = (Int32)RandomUUID.random();
 
-        public hub_call_dbproxy_caller(Abelkhan.Ichannel _ch, Abelkhan.modulemng modules) : base("hub_call_dbproxy", _ch)
+        public hub_call_dbproxy_caller(Abelkhan.Ichannel _ch, Abelkhan.ModuleMng modules) : base("hub_call_dbproxy", _ch)
         {
             if (rsp_cb_hub_call_dbproxy_handle == null)
             {
@@ -849,7 +922,7 @@ namespace Abelkhan
     }
 /*this cb code is codegen by Abelkhan for c#*/
     public class dbproxy_call_hub_rsp_cb : Abelkhan.Imodule {
-        public dbproxy_call_hub_rsp_cb(Abelkhan.modulemng modules) : base("dbproxy_call_hub_rsp_cb")
+        public dbproxy_call_hub_rsp_cb(Abelkhan.ModuleMng modules) : base("dbproxy_call_hub_rsp_cb")
         {
         }
 
@@ -859,7 +932,7 @@ namespace Abelkhan
         public static dbproxy_call_hub_rsp_cb rsp_cb_dbproxy_call_hub_handle = null;
         private Int32 uuid_7a1d0ce9_a121_3019_b67a_319998ea37c8 = (Int32)RandomUUID.random();
 
-        public dbproxy_call_hub_caller(Abelkhan.Ichannel _ch, Abelkhan.modulemng modules) : base("dbproxy_call_hub", _ch)
+        public dbproxy_call_hub_caller(Abelkhan.Ichannel _ch, Abelkhan.ModuleMng modules) : base("dbproxy_call_hub", _ch)
         {
             if (rsp_cb_dbproxy_call_hub_handle == null)
             {
@@ -878,6 +951,252 @@ namespace Abelkhan
             var _argv_e4756ccf_94e2_3b4f_958a_701f7076e607 = new List<MsgPack.MessagePackObject>();
             _argv_e4756ccf_94e2_3b4f_958a_701f7076e607.Add(callbackid);
             call_module_method("dbproxy_call_hub_ack_get_object_info_end", _argv_e4756ccf_94e2_3b4f_958a_701f7076e607);
+        }
+
+    }
+    public class hub_call_dbproxy_supabase_create_chat_room_cb
+    {
+        private UInt64 cb_uuid;
+        private hub_call_dbproxy_supabase_rsp_cb module_rsp_cb;
+
+        public hub_call_dbproxy_supabase_create_chat_room_cb(UInt64 _cb_uuid, hub_call_dbproxy_supabase_rsp_cb _module_rsp_cb)
+        {
+            cb_uuid = _cb_uuid;
+            module_rsp_cb = _module_rsp_cb;
+        }
+
+        public event Action on_create_chat_room_cb;
+        public event Action on_create_chat_room_err;
+        public event Action on_create_chat_room_timeout;
+
+        public hub_call_dbproxy_supabase_create_chat_room_cb callBack(Action cb, Action err)
+        {
+            on_create_chat_room_cb += cb;
+            on_create_chat_room_err += err;
+            return this;
+        }
+
+        public void timeout(UInt64 tick, Action timeout_cb)
+        {
+            TinyTimer.add_timer(tick, ()=>{
+                module_rsp_cb.create_chat_room_timeout(cb_uuid);
+            });
+            on_create_chat_room_timeout += timeout_cb;
+        }
+
+        public void call_cb()
+        {
+            if (on_create_chat_room_cb != null)
+            {
+                on_create_chat_room_cb();
+            }
+        }
+
+        public void call_err()
+        {
+            if (on_create_chat_room_err != null)
+            {
+                on_create_chat_room_err();
+            }
+        }
+
+        public void call_timeout()
+        {
+            if (on_create_chat_room_timeout != null)
+            {
+                on_create_chat_room_timeout();
+            }
+        }
+
+    }
+
+    public class hub_call_dbproxy_supabase_get_chat_room_cb
+    {
+        private UInt64 cb_uuid;
+        private hub_call_dbproxy_supabase_rsp_cb module_rsp_cb;
+
+        public hub_call_dbproxy_supabase_get_chat_room_cb(UInt64 _cb_uuid, hub_call_dbproxy_supabase_rsp_cb _module_rsp_cb)
+        {
+            cb_uuid = _cb_uuid;
+            module_rsp_cb = _module_rsp_cb;
+        }
+
+        public event Action<ChatRoom> on_get_chat_room_cb;
+        public event Action on_get_chat_room_err;
+        public event Action on_get_chat_room_timeout;
+
+        public hub_call_dbproxy_supabase_get_chat_room_cb callBack(Action<ChatRoom> cb, Action err)
+        {
+            on_get_chat_room_cb += cb;
+            on_get_chat_room_err += err;
+            return this;
+        }
+
+        public void timeout(UInt64 tick, Action timeout_cb)
+        {
+            TinyTimer.add_timer(tick, ()=>{
+                module_rsp_cb.get_chat_room_timeout(cb_uuid);
+            });
+            on_get_chat_room_timeout += timeout_cb;
+        }
+
+        public void call_cb(ChatRoom room_info)
+        {
+            if (on_get_chat_room_cb != null)
+            {
+                on_get_chat_room_cb(room_info);
+            }
+        }
+
+        public void call_err()
+        {
+            if (on_get_chat_room_err != null)
+            {
+                on_get_chat_room_err();
+            }
+        }
+
+        public void call_timeout()
+        {
+            if (on_get_chat_room_timeout != null)
+            {
+                on_get_chat_room_timeout();
+            }
+        }
+
+    }
+
+/*this cb code is codegen by Abelkhan for c#*/
+    public class hub_call_dbproxy_supabase_rsp_cb : Abelkhan.Imodule {
+        public Dictionary<UInt64, hub_call_dbproxy_supabase_create_chat_room_cb> map_create_chat_room;
+        public Dictionary<UInt64, hub_call_dbproxy_supabase_get_chat_room_cb> map_get_chat_room;
+        public hub_call_dbproxy_supabase_rsp_cb(Abelkhan.ModuleMng modules) : base("hub_call_dbproxy_supabase_rsp_cb")
+        {
+            map_create_chat_room = new Dictionary<UInt64, hub_call_dbproxy_supabase_create_chat_room_cb>();
+            modules.reg_method("hub_call_dbproxy_supabase_rsp_cb_create_chat_room_rsp", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, create_chat_room_rsp));
+            modules.reg_method("hub_call_dbproxy_supabase_rsp_cb_create_chat_room_err", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, create_chat_room_err));
+            map_get_chat_room = new Dictionary<UInt64, hub_call_dbproxy_supabase_get_chat_room_cb>();
+            modules.reg_method("hub_call_dbproxy_supabase_rsp_cb_get_chat_room_rsp", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, get_chat_room_rsp));
+            modules.reg_method("hub_call_dbproxy_supabase_rsp_cb_get_chat_room_err", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, get_chat_room_err));
+        }
+
+        public void create_chat_room_rsp(IList<MsgPack.MessagePackObject> inArray){
+            var uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var rsp = try_get_and_del_create_chat_room_cb(uuid);
+            if (rsp != null)
+            {
+                rsp.call_cb();
+            }
+        }
+
+        public void create_chat_room_err(IList<MsgPack.MessagePackObject> inArray){
+            var uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var rsp = try_get_and_del_create_chat_room_cb(uuid);
+            if (rsp != null)
+            {
+                rsp.call_err();
+            }
+        }
+
+        public void create_chat_room_timeout(UInt64 cb_uuid){
+            var rsp = try_get_and_del_create_chat_room_cb(cb_uuid);
+            if (rsp != null){
+                rsp.call_timeout();
+            }
+        }
+
+        private hub_call_dbproxy_supabase_create_chat_room_cb try_get_and_del_create_chat_room_cb(UInt64 uuid){
+            lock(map_create_chat_room)
+            {
+                if (map_create_chat_room.TryGetValue(uuid, out hub_call_dbproxy_supabase_create_chat_room_cb rsp))
+                {
+                    map_create_chat_room.Remove(uuid);
+                }
+                return rsp;
+            }
+        }
+
+        public void get_chat_room_rsp(IList<MsgPack.MessagePackObject> inArray){
+            var uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _room_info = ChatRoom.protcol_to_ChatRoom(((MsgPack.MessagePackObject)inArray[1]).AsDictionary());
+            var rsp = try_get_and_del_get_chat_room_cb(uuid);
+            if (rsp != null)
+            {
+                rsp.call_cb(_room_info);
+            }
+        }
+
+        public void get_chat_room_err(IList<MsgPack.MessagePackObject> inArray){
+            var uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var rsp = try_get_and_del_get_chat_room_cb(uuid);
+            if (rsp != null)
+            {
+                rsp.call_err();
+            }
+        }
+
+        public void get_chat_room_timeout(UInt64 cb_uuid){
+            var rsp = try_get_and_del_get_chat_room_cb(cb_uuid);
+            if (rsp != null){
+                rsp.call_timeout();
+            }
+        }
+
+        private hub_call_dbproxy_supabase_get_chat_room_cb try_get_and_del_get_chat_room_cb(UInt64 uuid){
+            lock(map_get_chat_room)
+            {
+                if (map_get_chat_room.TryGetValue(uuid, out hub_call_dbproxy_supabase_get_chat_room_cb rsp))
+                {
+                    map_get_chat_room.Remove(uuid);
+                }
+                return rsp;
+            }
+        }
+
+    }
+
+    public class hub_call_dbproxy_supabase_caller : Abelkhan.Icaller {
+        public static hub_call_dbproxy_supabase_rsp_cb rsp_cb_hub_call_dbproxy_supabase_handle = null;
+        private Int32 uuid_02508e06_139c_37ce_829d_78c7231bc021 = (Int32)RandomUUID.random();
+
+        public hub_call_dbproxy_supabase_caller(Abelkhan.Ichannel _ch, Abelkhan.ModuleMng modules) : base("hub_call_dbproxy_supabase", _ch)
+        {
+            if (rsp_cb_hub_call_dbproxy_supabase_handle == null)
+            {
+                rsp_cb_hub_call_dbproxy_supabase_handle = new hub_call_dbproxy_supabase_rsp_cb(modules);
+            }
+        }
+
+        public hub_call_dbproxy_supabase_create_chat_room_cb create_chat_room(ChatRoom room_info){
+            var uuid_b3a8dff9_61f5_57a5_9b61_83f2a0b84cd6 = (UInt32)Interlocked.Increment(ref uuid_02508e06_139c_37ce_829d_78c7231bc021);
+
+            var _argv_468bb304_c0ba_300f_9139_878fba058058 = new List<MsgPack.MessagePackObject>();
+            _argv_468bb304_c0ba_300f_9139_878fba058058.Add(uuid_b3a8dff9_61f5_57a5_9b61_83f2a0b84cd6);
+            _argv_468bb304_c0ba_300f_9139_878fba058058.Add(MsgPack.MessagePackObject.FromObject(ChatRoom.ChatRoom_to_protcol(room_info)));
+            call_module_method("hub_call_dbproxy_supabase_create_chat_room", _argv_468bb304_c0ba_300f_9139_878fba058058);
+
+            var cb_create_chat_room_obj = new hub_call_dbproxy_supabase_create_chat_room_cb(uuid_b3a8dff9_61f5_57a5_9b61_83f2a0b84cd6, rsp_cb_hub_call_dbproxy_supabase_handle);
+            lock(rsp_cb_hub_call_dbproxy_supabase_handle.map_create_chat_room)
+            {
+                rsp_cb_hub_call_dbproxy_supabase_handle.map_create_chat_room.Add(uuid_b3a8dff9_61f5_57a5_9b61_83f2a0b84cd6, cb_create_chat_room_obj);
+            }
+            return cb_create_chat_room_obj;
+        }
+
+        public hub_call_dbproxy_supabase_get_chat_room_cb get_chat_room(string roomId){
+            var uuid_22ef32f6_487f_5998_a054_508251a570ed = (UInt32)Interlocked.Increment(ref uuid_02508e06_139c_37ce_829d_78c7231bc021);
+
+            var _argv_b5a97ed6_25c7_3418_bb3d_e76717e6e9d0 = new List<MsgPack.MessagePackObject>();
+            _argv_b5a97ed6_25c7_3418_bb3d_e76717e6e9d0.Add(uuid_22ef32f6_487f_5998_a054_508251a570ed);
+            _argv_b5a97ed6_25c7_3418_bb3d_e76717e6e9d0.Add(roomId);
+            call_module_method("hub_call_dbproxy_supabase_get_chat_room", _argv_b5a97ed6_25c7_3418_bb3d_e76717e6e9d0);
+
+            var cb_get_chat_room_obj = new hub_call_dbproxy_supabase_get_chat_room_cb(uuid_22ef32f6_487f_5998_a054_508251a570ed, rsp_cb_hub_call_dbproxy_supabase_handle);
+            lock(rsp_cb_hub_call_dbproxy_supabase_handle.map_get_chat_room)
+            {
+                rsp_cb_hub_call_dbproxy_supabase_handle.map_get_chat_room.Add(uuid_22ef32f6_487f_5998_a054_508251a570ed, cb_get_chat_room_obj);
+            }
+            return cb_get_chat_room_obj;
         }
 
     }
@@ -1033,8 +1352,8 @@ namespace Abelkhan
     }
 
     public class hub_call_dbproxy_module : Abelkhan.Imodule {
-        private Abelkhan.modulemng modules;
-        public hub_call_dbproxy_module(Abelkhan.modulemng _modules) : base("hub_call_dbproxy")
+        private Abelkhan.ModuleMng modules;
+        public hub_call_dbproxy_module(Abelkhan.ModuleMng _modules) : base("hub_call_dbproxy")
         {
             modules = _modules;
             modules.reg_method("hub_call_dbproxy_reg_hub", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, reg_hub));
@@ -1157,8 +1476,8 @@ namespace Abelkhan
 
     }
     public class dbproxy_call_hub_module : Abelkhan.Imodule {
-        private Abelkhan.modulemng modules;
-        public dbproxy_call_hub_module(Abelkhan.modulemng _modules) : base("dbproxy_call_hub")
+        private Abelkhan.ModuleMng modules;
+        public dbproxy_call_hub_module(Abelkhan.ModuleMng _modules) : base("dbproxy_call_hub")
         {
             modules = _modules;
             modules.reg_method("dbproxy_call_hub_ack_get_object_info", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, ack_get_object_info));
@@ -1180,6 +1499,81 @@ namespace Abelkhan
             if (on_ack_get_object_info_end != null){
                 on_ack_get_object_info_end(_callbackid);
             }
+        }
+
+    }
+    public class hub_call_dbproxy_supabase_create_chat_room_rsp : Abelkhan.Response {
+        private UInt64 uuid_bf63274f_763e_38cf_ba5b_1794323fedb8;
+        public hub_call_dbproxy_supabase_create_chat_room_rsp(Abelkhan.Ichannel _ch, UInt64 _uuid) : base("hub_call_dbproxy_supabase_rsp_cb", _ch)
+        {
+            uuid_bf63274f_763e_38cf_ba5b_1794323fedb8 = _uuid;
+        }
+
+        public void rsp(){
+            var _argv_468bb304_c0ba_300f_9139_878fba058058 = new List<MsgPack.MessagePackObject>();
+            _argv_468bb304_c0ba_300f_9139_878fba058058.Add(uuid_bf63274f_763e_38cf_ba5b_1794323fedb8);
+            call_module_method("hub_call_dbproxy_supabase_rsp_cb_create_chat_room_rsp", _argv_468bb304_c0ba_300f_9139_878fba058058);
+        }
+
+        public void err(){
+            var _argv_468bb304_c0ba_300f_9139_878fba058058 = new List<MsgPack.MessagePackObject>();
+            _argv_468bb304_c0ba_300f_9139_878fba058058.Add(uuid_bf63274f_763e_38cf_ba5b_1794323fedb8);
+            call_module_method("hub_call_dbproxy_supabase_rsp_cb_create_chat_room_err", _argv_468bb304_c0ba_300f_9139_878fba058058);
+        }
+
+    }
+
+    public class hub_call_dbproxy_supabase_get_chat_room_rsp : Abelkhan.Response {
+        private UInt64 uuid_a0e34e87_77e4_3b74_8359_ec41a660304a;
+        public hub_call_dbproxy_supabase_get_chat_room_rsp(Abelkhan.Ichannel _ch, UInt64 _uuid) : base("hub_call_dbproxy_supabase_rsp_cb", _ch)
+        {
+            uuid_a0e34e87_77e4_3b74_8359_ec41a660304a = _uuid;
+        }
+
+        public void rsp(ChatRoom room_info_6bdeecee_07e7_32d2_a4bc_6ebc8b13f116){
+            var _argv_b5a97ed6_25c7_3418_bb3d_e76717e6e9d0 = new List<MsgPack.MessagePackObject>();
+            _argv_b5a97ed6_25c7_3418_bb3d_e76717e6e9d0.Add(uuid_a0e34e87_77e4_3b74_8359_ec41a660304a);
+            _argv_b5a97ed6_25c7_3418_bb3d_e76717e6e9d0.Add(MsgPack.MessagePackObject.FromObject(ChatRoom.ChatRoom_to_protcol(room_info_6bdeecee_07e7_32d2_a4bc_6ebc8b13f116)));
+            call_module_method("hub_call_dbproxy_supabase_rsp_cb_get_chat_room_rsp", _argv_b5a97ed6_25c7_3418_bb3d_e76717e6e9d0);
+        }
+
+        public void err(){
+            var _argv_b5a97ed6_25c7_3418_bb3d_e76717e6e9d0 = new List<MsgPack.MessagePackObject>();
+            _argv_b5a97ed6_25c7_3418_bb3d_e76717e6e9d0.Add(uuid_a0e34e87_77e4_3b74_8359_ec41a660304a);
+            call_module_method("hub_call_dbproxy_supabase_rsp_cb_get_chat_room_err", _argv_b5a97ed6_25c7_3418_bb3d_e76717e6e9d0);
+        }
+
+    }
+
+    public class hub_call_dbproxy_supabase_module : Abelkhan.Imodule {
+        private Abelkhan.ModuleMng modules;
+        public hub_call_dbproxy_supabase_module(Abelkhan.ModuleMng _modules) : base("hub_call_dbproxy_supabase")
+        {
+            modules = _modules;
+            modules.reg_method("hub_call_dbproxy_supabase_create_chat_room", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, create_chat_room));
+            modules.reg_method("hub_call_dbproxy_supabase_get_chat_room", Tuple.Create<Abelkhan.Imodule, Action<IList<MsgPack.MessagePackObject> > >((Abelkhan.Imodule)this, get_chat_room));
+        }
+
+        public event Action<ChatRoom> on_create_chat_room;
+        public void create_chat_room(IList<MsgPack.MessagePackObject> inArray){
+            var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _room_info = ChatRoom.protcol_to_ChatRoom(((MsgPack.MessagePackObject)inArray[1]).AsDictionary());
+            rsp.Value = new hub_call_dbproxy_supabase_create_chat_room_rsp(current_ch.Value, _cb_uuid);
+            if (on_create_chat_room != null){
+                on_create_chat_room(_room_info);
+            }
+            rsp.Value = null;
+        }
+
+        public event Action<string> on_get_chat_room;
+        public void get_chat_room(IList<MsgPack.MessagePackObject> inArray){
+            var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _roomId = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            rsp.Value = new hub_call_dbproxy_supabase_get_chat_room_rsp(current_ch.Value, _cb_uuid);
+            if (on_get_chat_room != null){
+                on_get_chat_room(_roomId);
+            }
+            rsp.Value = null;
         }
 
     }

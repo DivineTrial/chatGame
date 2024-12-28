@@ -25,3 +25,23 @@ module dbproxy_call_hub{
 	ack_get_object_info_end ntf(string callbackid);
 	
 }
+
+struct ChatUser
+{
+    bool isAI;
+    string userId;
+    string roomId;
+}
+
+struct ChatRoom 
+{
+	string roomId;
+    string Theme;
+	string RoomName;
+    ChatUser[] userList;
+}
+
+module hub_call_dbproxy_supabase {
+	create_chat_room req(ChatRoom room_info) rsp() err();
+	get_chat_room req(string roomId) rsp(ChatRoom room_info) err();
+}

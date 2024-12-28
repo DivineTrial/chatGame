@@ -8,8 +8,8 @@ import tools
 
 def gen_module_module(module_name, funcs, dependent_struct, dependent_enum, enum):
     code_constructor = "export class " + module_name + "_module extends abelkhan.Imodule {\n"
-    code_constructor += "    private modules:abelkhan.modulemng;\n"
-    code_constructor += "    constructor(modules:abelkhan.modulemng){\n"
+    code_constructor += "    private modules:Abelkhan.ModuleMng;\n"
+    code_constructor += "    constructor(modules:Abelkhan.ModuleMng){\n"
     code_constructor += "        super(\"" + module_name + "\");\n"
     code_constructor += "        this.modules = modules;\n"
         

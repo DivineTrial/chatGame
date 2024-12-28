@@ -66,7 +66,9 @@ namespace Gate
 		private readonly Dictionary<string, HubProxy> hub_name_proxy = new();
 		private readonly Dictionary<Abelkhan.Ichannel, string> hub_channel_name = new();
 
-		public HubSvrManager()
+        public event Action<HubProxy> on_hubproxy;
+
+        public HubSvrManager()
 		{
 		}
 
@@ -80,6 +82,8 @@ namespace Gate
             }
             hub_channel_name[ch] = hub_name;
             hub_name_proxy[hub_name] = _hubproxy;
+
+			on_hubproxy?.Invoke(_hubproxy);
 
             return _hubproxy;
 		}

@@ -1,5 +1,10 @@
 ﻿
+using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using System;
 using System.Diagnostics.Metrics;
+using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace DBProxy
 {
@@ -10,7 +15,7 @@ namespace DBProxy
 
         public hub_msg_handle(HubManager _hubmanager_)
 		{
-			_hubmanager = _hubmanager_;
+            _hubmanager = _hubmanager_;
 
             _hub_call_dbproxy_module = new Abelkhan.hub_call_dbproxy_module(Abelkhan.ModuleMgrHandle._modulemng);
             _hub_call_dbproxy_module.on_reg_hub += reg_hub;

@@ -19,18 +19,17 @@ namespace gate_svr
 
     public class CreateRoomHandle
     {
-        private HubSvrManager _hubmanager;
         private RoomManager _roommanager;
 
-        public CreateRoomHandle(HubSvrManager hubmgr, RoomManager rooms)
+        public CreateRoomHandle(RoomManager rooms)
         {
-            _hubmanager = hubmgr;
             _roommanager = rooms;
         }
 
         public async Task DoCreateRoom(AbelkhanHttpRequest req)
         {
-            if (_hubmanager.get_hub_proxy("Room", out var _p))
+            var roomId = Guid.NewGuid().ToString();
+            if (_roommanager.HashHubProxy(roomId, out var _p))
             {
                 var json = System.Text.Encoding.UTF8.GetString(req.Content);
                 var request = Newtonsoft.Json.JsonConvert.DeserializeObject<CreateRoomRequest>(json);
@@ -38,16 +37,16 @@ namespace gate_svr
                 {
                     var task = new TaskCompletionSource();
 
-                    _p.RoomCaller.create_room(request.UserID, request.Theme, request.RoomName).callBack(async (room_id) =>
+                    _p.RoomCaller.create_room(roomId, request.UserID, request.Theme, request.RoomName).callBack(async () =>
                     {
-                        _roommanager.req_hub(room_id, _p);
+                        await _roommanager.req_hub(roomId, _p);
 
                         var status = Microsoft.AspNetCore.Http.StatusCodes.Status200OK;
                         var hearders = new Dictionary<string, string>() { { "Content-Type", "application/json" } };
                         var rsp = new CreateRoomResponse()
                         {
                             ErrCode = 0,
-                            RoomID = room_id,
+                            RoomID = roomId,
                         };
                         var json_str = Newtonsoft.Json.JsonConvert.SerializeObject(rsp);
                         var json_bytes = System.Text.Encoding.UTF8.GetBytes(json_str);

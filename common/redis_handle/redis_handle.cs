@@ -40,7 +40,7 @@ namespace Abelkhan
             }
         }
 
-        public Task<bool> SetStrData(string key, string data, int timeout)
+        public Task<bool> SetStrData(string key, string data, int timeout = 0)
         {
             while (true)
             {

@@ -13,7 +13,7 @@ module gate_call_hub{
 }
 
 module gate_call_room {
-	create_room req(string user_id, string theme, string room_name) rsp(string room_id) err(int32 err_code);
+	create_room req(string room_id, string user_id, string theme, string room_name) rsp() err(int32 err_code);
 
 	join_room req(string user_id, string room_id) rsp(string theme, string room_name) err(int32 err_code);
 

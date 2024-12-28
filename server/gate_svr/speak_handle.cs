@@ -18,12 +18,10 @@ namespace gate_svr
 
     public class SpeakHandle
     {
-        private HubSvrManager _hubmanager;
         private RoomManager _rooms;
 
         public SpeakHandle(HubSvrManager hubmgr, RoomManager rooms)
         {
-            _hubmanager = hubmgr;
             _rooms = rooms;
         }
 

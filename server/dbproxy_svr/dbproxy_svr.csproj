@@ -17,7 +17,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="chat_room_msg_handle.cs~RF12ea734c.TMP" />
     <None Remove="Program.cs~RF2e22ce96.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Supabase" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>

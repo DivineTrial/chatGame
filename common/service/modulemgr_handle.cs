@@ -8,6 +8,6 @@ namespace Abelkhan
 {
     public class ModuleMgrHandle
     {
-        public static Abelkhan.modulemng _modulemng = new modulemng();
+        public static Abelkhan.ModuleMng _modulemng = new ModuleMng();
     }
 }

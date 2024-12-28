@@ -11,7 +11,7 @@ def gen_module_caller(module_name, funcs, dependent_struct, dependent_enum, enum
 
     cb_code = "/*this cb code is codegen by abelkhan for ts*/\n"
     cb_code += "export class " + module_name + "_rsp_cb extends abelkhan.Imodule {\n"
-    cb_code_constructor = "    constructor(modules:abelkhan.modulemng){\n"
+    cb_code_constructor = "    constructor(modules:Abelkhan.ModuleMng){\n"
     cb_code_constructor += "        super(\"" + module_name + "_rsp_cb\");\n"
     cb_code_section = ""
 
@@ -19,7 +19,7 @@ def gen_module_caller(module_name, funcs, dependent_struct, dependent_enum, enum
     code += "export class " + module_name + "_caller extends abelkhan.Icaller {\n"
     _uuid = '_'.join(str(uuid.uuid3(uuid.NAMESPACE_DNS, module_name)).split('-'))
     code += "    private uuid_" + _uuid + " : number = Math.round(Math.random() * 1000);\n\n"
-    code += "    constructor(_ch:any, modules:abelkhan.modulemng){\n"
+    code += "    constructor(_ch:any, modules:Abelkhan.ModuleMng){\n"
     code += "        super(\"" + module_name + "\", _ch);\n"
     code += "        if (rsp_cb_" + module_name + "_handle == null){\n"
     code += "            rsp_cb_" + module_name + "_handle = new " + module_name + "_rsp_cb(modules);\n"

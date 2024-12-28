@@ -45,6 +45,8 @@ namespace Gate {
         private static readonly List<Abelkhan.Ichannel> remove_chs = new();
         public static Service.PrometheusMetric _prometheus;
 
+        public event Action<HubProxy> on_hubproxy;
+
         public void on_close_server()
         {
             sig_close_server.Invoke();
@@ -110,6 +112,11 @@ namespace Gate {
             _hubsvrmanager = new HubSvrManager();
             _clientmanager = new ClientManager(_hubsvrmanager);
             _closehandle = new CloseHandle();
+
+            _hubsvrmanager.on_hubproxy += (_p) =>
+            {
+                on_hubproxy?.Invoke(_p);
+            };
 
             var redismq_url = _root_config.get_value_string("redis_for_mq");
             if (!_root_config.has_key("redis_for_mq_pwd"))
