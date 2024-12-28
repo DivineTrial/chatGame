@@ -71,7 +71,7 @@ namespace Abelkhan
                     _struct6899c4da_23cd_3177_85a2_0c524d860b34.RoomName = ((MsgPack.MessagePackObject)i.Value).AsString();
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "userList"){
-                    _struct6899c4da_23cd_3177_85a2_0c524d860b34.userList = new();
+                    _struct6899c4da_23cd_3177_85a2_0c524d860b34.userList = new List<ChatUser>();
                     var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
                     foreach (var v_ in _protocol_array){
                         _struct6899c4da_23cd_3177_85a2_0c524d860b34.userList.Add(ChatUser.protcol_to_ChatUser(((MsgPack.MessagePackObject)v_).AsDictionary()));
