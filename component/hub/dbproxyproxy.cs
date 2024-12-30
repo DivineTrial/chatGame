@@ -13,6 +13,14 @@ namespace Hub
         public string db_name;
         public Abelkhan.Ichannel ch;
         private Abelkhan.hub_call_dbproxy_caller _hub_call_dbproxy_caller;
+        private Abelkhan.hub_call_dbproxy_supabase_caller _hub_call_dbproxy_supabase_caller;
+        public Abelkhan.hub_call_dbproxy_supabase_caller SupabaseCaller
+        {
+            get
+            {
+                return _hub_call_dbproxy_supabase_caller;
+            }
+        }
 
         private System.Collections.Concurrent.ConcurrentDictionary<string, Collection> _Collections;
 
@@ -29,6 +37,7 @@ namespace Hub
             ch = _ch;
 
             _hub_call_dbproxy_caller = new Abelkhan.hub_call_dbproxy_caller(ch, Abelkhan.ModuleMgrHandle._modulemng);
+            _hub_call_dbproxy_supabase_caller = new Abelkhan.hub_call_dbproxy_supabase_caller(ch, Abelkhan.ModuleMgrHandle._modulemng);
 
             onGetObjectInfo_callback_set = new Dictionary<string, Action<MongoDB.Bson.BsonArray> >();
             onGetObjectInfo_end_cb_set = new Dictionary<string, Action>();

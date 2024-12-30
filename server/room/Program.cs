@@ -2,7 +2,7 @@
 
 namespace Room
 {
-    class Room
+    public class Room
     {
         static void Main(string[] args)
         {

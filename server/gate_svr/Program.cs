@@ -46,13 +46,16 @@ namespace gate_svr
                 if (_gate != null && _gate._redis_handle != null)
                 {
                     var hub_name = await _gate._redis_handle.GetStrData(roomId);
+                    if (string.IsNullOrEmpty(hub_name))
+                    {
+                        return null;
+                    }
                     if (_gate._hubsvrmanager.get_hub(hub_name, out var _proxy))
                     {
                         return _proxy;
                     }
                 }
             }
-
             return null;
         }
     }
@@ -83,7 +86,10 @@ namespace gate_svr
             var createRoomHandle = new CreateRoomHandle(rooms);
             Service.HttpService.post("/create_room_handle", createRoomHandle.DoCreateRoom);
 
-            var speakHandle = new SpeakHandle(_gate._hubsvrmanager, rooms);
+            var joinRoomHandle = new JoinRoomHandle(rooms);
+            Service.HttpService.post("/join_room_handle", joinRoomHandle.DoJoinRoom);
+
+            var speakHandle = new SpeakHandle(rooms);
             Service.HttpService.post("/speak", speakHandle.DoSpeak);
 
             _gate.run().Wait();

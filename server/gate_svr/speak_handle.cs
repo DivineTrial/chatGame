@@ -20,7 +20,7 @@ namespace gate_svr
     {
         private RoomManager _rooms;
 
-        public SpeakHandle(HubSvrManager hubmgr, RoomManager rooms)
+        public SpeakHandle(RoomManager rooms)
         {
             _rooms = rooms;
         }
@@ -52,7 +52,7 @@ namespace gate_svr
                 }
             }
 
-            var err_rsp = new CreateRoomResponse()
+            var err_rsp = new SpeakResponse()
             {
                 ErrCode = -1,
             };

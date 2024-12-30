@@ -73,6 +73,18 @@ namespace Room
             userList[curr_speak_index].WaitSpeak();
         }
 
+        public void JoinRoom(string _userId)
+        {
+            foreach (ChatUser user in userList)
+            {
+                if (user.userId == _userId)
+                {
+                    return;
+                }
+            }
+            userList.Add(new ChatUser(_userId, roomId));
+        }
+
         public void Speak(string _userId, string _json)
         {
             if (userList[curr_speak_index].userId != _userId)
@@ -99,11 +111,34 @@ namespace Room
             rooms = new Dictionary<string, ChatRoom>();
         }
 
-        public string CreateRoom(string _roomId, string _userId, string Theme, string RoomName)
+        public void CreateRoom(string _roomId, string _userId, string Theme, string RoomName)
         {
             var room = new ChatRoom(_roomId, _userId, Theme, RoomName);
             rooms[room.roomId] = room;
-            return room.roomId;
+        }
+
+        public Task<ChatRoom?> JoinRoom(string _userId, string _roomId)
+        {
+            var task = new TaskCompletionSource<ChatRoom?>();
+
+            if (rooms.TryGetValue(_roomId, out var room))
+            {
+                room.JoinRoom(_userId);
+                task.SetResult(room);
+                return task.Task;
+            }
+
+            Hub.Hub.get_random_dbproxyproxy().SupabaseCaller.get_chat_room(_roomId).callBack((_db_room) =>
+            {
+                var room = new ChatRoom(_db_room.roomId, _userId, _db_room.Theme, _db_room.RoomName);
+                rooms[room.roomId] = room;
+                task.SetResult(room);
+            }, () =>
+            {
+                task.SetResult(null);
+            });
+
+            return task.Task;
         }
 
         public ChatRoom? GetRoom(string roomId)

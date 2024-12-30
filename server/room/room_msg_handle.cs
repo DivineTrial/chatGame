@@ -15,7 +15,37 @@ namespace Room
 
             _gate_call_room_module = new Abelkhan.gate_call_room_module(Abelkhan.ModuleMgrHandle._modulemng);
             _gate_call_room_module.on_create_room += _gate_call_room_module_on_create_room;
+            _gate_call_room_module.on_join_room += _gate_call_room_module_on_join_room;
             _gate_call_room_module.on_speak += _gate_call_room_module_on_speak;
+        }
+
+        private async void _gate_call_room_module_on_join_room(string user_id, string room_id)
+        {
+            Log.Log.trace("on_join_room begin!");
+
+            if (_gate_call_room_module.rsp.Value != null)
+            {
+                var rsp = (Abelkhan.gate_call_room_join_room_rsp)_gate_call_room_module.rsp.Value;
+                try
+                {
+                    var room = await rooms.JoinRoom(user_id, room_id);
+                    if (room != null)
+                    {
+                        rsp.rsp(room.Theme, room.RoomName);
+                    }
+                    else
+                    {
+                        rsp.err((int)Abelkhan.framework_error.enum_join_room_undefine_room);
+                    }
+                }
+                catch (System.Exception err)
+                {
+                    Log.Log.err("on_create_room err:{0}", err);
+                    rsp.err((int)Abelkhan.framework_error.enum_join_room_error);
+                }
+            }
+
+            Log.Log.trace("on_join_room end!");
         }
 
         private void _gate_call_room_module_on_speak(string UserID, string Roomid, string SpeakJson)
